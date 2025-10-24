@@ -1,0 +1,15 @@
+//errores variables
+var x = 10
+let y = 20;
+
+//errores estructura
+if (x > 5 {
+    print("Hola");
+}
+
+//error de declaracion
+var 123numero = 10;
+
+//error de expresion
+var x = ;
+let y = 10 + ;
