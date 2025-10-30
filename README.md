@@ -1,8 +1,12 @@
-Aquí tienes el Markdown estructurado tal como pediste 👇
-
----
-
 ````markdown
+### Comandos para ejecucion
+## Dentro de las carpetas com.lexico.analizador:
+javacc Parser.jj
+javac *.java
+
+##Ya compilados ejecutar dentro de com.lexico.analizador:
+java compi < test1.txt
+
 # 🧩 Analizador Léxico
 
 ---
@@ -178,6 +182,95 @@ void Inicio() :
 }
 ````
 
+````markdown
+##Ejemplo de codigo para reconocer a sus integrantes:
+import packg libreria;
+
+class clase1 (
+ 
+  
+  global let numero as 50;
+  strg nombre as "juan";
+  display(nombre);
+ 
+	
+     input.write("ingresa cantidad", cantidad);
+     input.read;
+
+     if(cantidad == 50){
+      display("son iguales");
+  }
+
+    elsif(cantidad < numero){
+       display("la cantidad es menor");
+  }
+
+     else{
+     display("la cantidad es mayor");
+   }
+
+  let x as 1;
+  switch(x) {
+   
+   case 0 then
+   Math.pow(x,2)
+   x+= 1;
+   
+   case 1 then
+   display(x);
+  
+   break;
+   default display(x);
+  }
+)
+
+public metodo(){
+	
+        instance clase1 as new clase1[]
+	#< Esto es un comentario >#
+	cons let b as 100
+	let a as 0
+
+        let obtener as func(let b, let a) {
+	     return a
+	  while(a < b) then {
+           if(a == 50){
+           strand hilo Start;
+           }
+          }
+
+	  for(i=2;i<4;i++) then {
+           a = i;
+ 	  }
+	 
+    }
+}
+
+      try{
+        open.File("archivo.txt")
+	readfile();
+    }
+
+    oops {
+     
+    display("error");
+   }
+
+
+   array arreglo as [
+   "leo", "juan" , 4
+  ]
+
+      lambda balon(a) => 20*a;
+
+      rept { 
+	a += 10; 
+	until a = 20 * 20;
+
+	}
+}
+````
+
 ---
 
 ### 🧠 Explicación breve
@@ -199,14 +292,3 @@ Su objetivo es **leer un flujo de entrada (archivo o texto)** y **dividirlo en t
 2. Clasifica cada secuencia de caracteres según su tipo de token.
 3. Informa en consola qué se reconoció (por ejemplo: `OP_ARITMETICO -> +`).
 4. Finaliza indicando si el análisis fue exitoso o si se detectaron errores.
-
----
-
-📘 *Este tipo de analizador es una parte fundamental del proceso de compilación, ya que transforma el texto fuente en unidades léxicas antes del análisis sintáctico y semántico.*
-
-```
-
----
-
-¿Quieres que le agregue una pequeña **sección visual de ejemplo de ejecución** (por ejemplo, cómo se vería al analizar un texto con operadores y palabras clave)? Puedo añadirla al final del Markdown.
-```
