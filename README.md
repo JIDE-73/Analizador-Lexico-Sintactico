@@ -1,130 +1,212 @@
-# 🚀 Compilador JIDE-73 - Documentación
+Aquí tienes el Markdown estructurado tal como pediste 👇
 
-## 📋 Descripción General
+---
 
-**JIDE-73** es un compilador educativo diseñado para analizar y procesar un lenguaje de programación moderno que combina características de múltiples paradigmas. Este sistema integra capacidades de análisis léxico, sintáctico y semántico en una herramienta unificada.
+````markdown
+# 🧩 Analizador Léxico
 
-## 🎯 Características Principales
+---
 
-### **Multiparadigma**
-- **Programación estructurada** con bloques y control de flujo
-- **Orientación a objetos** con clases, herencia y polimorfismo
-- **Programación funcional** con funciones de primera clase
-- **Concurrencia integrada** para programación paralela
+### 📜 Código fuente
 
-### **Sistema de Tipos Avanzado**
-- Tipado estático con inferencia
-- Tipos primitivos y complejos
-- Genéricos y plantillas
-- Tipos nullable y opcionales
-- Sistema de módulos y namespaces
+```java
+PARSER_BEGIN(compi)
+import java.io.*;
 
-### **Dominios Especializados**
-- **Consultas SQL integradas** directamente en el lenguaje
-- **Peticiones HTTP** como construcciones nativas
-- **Gestión de memoria** manual y automática
-- **Anotaciones y metaprogramación**
+public class compi {
+  public static void main(String[] args) throws ParseException {
+    InputStream inputStream = System.in; // Por defecto usa stdin
 
-## 🏗 Arquitectura del Lenguaje
+    if (args.length > 0) {
+      try {
+        inputStream = new FileInputStream(args[0]);
+      } catch (FileNotFoundException e) {
+        System.out.println("Error: Archivo no encontrado - " + args[0]);
+        return;
+      }
+    } else {
+      System.out.println("Leyendo desde la entrada estándar...");
+    }
 
-### **Estructuras de Control**
-- Condicionales: `if/elif/else`
-- Bucles: `while`, `do-while`, `for`, `foreach`
-- Pattern matching: `match/when`
-- Control de flujo avanzado
+    try {
+      compi analizador = new compi(inputStream);
+      analizador.Inicio();
+      System.out.println("\tTermino el analisis");
+      System.out.println("\tAnalisis exitoso");
+    } catch (ParseException e) {
+      System.out.println("\tSe encontraron errores en el analisis");
+      System.out.println(e.getMessage());
+    }
+  }
+}
+PARSER_END(compi)
 
-### **Sistema de Módulos**
-- Importación y exportación de componentes
-- Namespaces para organización del código
-- Control de visibilidad y acceso
+// LEXICO
+SKIP : { " " }
+SKIP : { "\n" | "\r" | "\r\n" | "\t" }
 
-### **Concurrencia y Paralelismo**
-- Programación asíncrona con `async/await`
-- Sincronización con `lock/mutex`
-- Manejo de hilos y tareas
+// OPERADORES
+TOKEN: {
+  <OP_ARITMETICO: "+" | "-" | "*" | "/" | "%" | "^"> {System.out.println("OP_ARITMETICO -> " + image);}
+  | <OP_RELACIONAL: ">" | "<" | ">=" | "<=" | "==" | "!=" | "is" | "like"> {System.out.println("OP_RELACIONAL -> " + image);}
+  | <OP_LOGICO: "&&" | "||" | "!" | "and" | "or" | "not"> {System.out.println("OP_LOGICO -> " + image);}
+  | <OP_ASIGNACION: "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "^=" | "&=" | "|=" | "<<=" | ">>="> {System.out.println("OP_ASIGNACION -> " + image);}
+  | <OP_INCREMENTO: "++" | "--"> {System.out.println("OP_INCREMENTO -> " + image);}
+  | <OP_TERNARIO: "?:"> {System.out.println("OP_TERNARIO -> " + image);}
+  | <OP_FUSION_NULA: "??"> {System.out.println("OP_FUSION_NULA -> " + image);}
+  | <OP_BIT: "~"> {System.out.println("OP_BIT -> " + image);}
+  | <APUNTADOR: "->" | "=>"> {System.out.println("APUNTADOR -> " + image);}
+}
 
-## 🔧 Componentes del Compilador
+// DELIMITADORES Y PUNTUACIÓN
+TOKEN: {
+  <DELIMITADOR: "(" | ")" | "{" | "}" | "[" | "]" | "#<" | ">#"> {System.out.println("DELIMITADOR -> " + image);}
+  | <PUNTUACION: "." | "," | ":" | ";" | "->" | "=>"> {System.out.println("PUNTUACION -> " + image);}
+}
 
-### **Analizador Léxico (Lexer)**
-- Tokenización del código fuente
-- Reconocimiento de palabras reservadas
-- Identificación de literales y operadores
-- Manejo de comentarios y espacios
+// ESTRUCTURAS DE CONTROL
+TOKEN: {
+  // separar CONTROL_CONDICIONAL y CONTROL_EXCEPCIONES, para sintactico
+  <CONTROL_CONDICIONAL: "if" | "else" | "elsif" | "then" | "endif" | "switch" | "case" | "endcase" | "default"> {System.out.println("CONTROL_CONDICIONAL -> " + image);}
+  | <CONTROL_BUCLES: "while" | "for" | "foreach" | "rept" | "until" | "endfor" | "continue" | "next"> {System.out.println("CONTROL_BUCLES -> " + image);}
+  | <CONTROL_EXCEPCIONES: "try" | "oops" | "finally" | "throw" | "excep" | "raise" | "checked" | "unchecked" | "pass"> {System.out.println("CONTROL_EXCEPCIONES -> " + image);}
+}
 
-### **Analizador Sintáctico (Parser)**
-- Validación de estructura gramatical
-- Construcción del árbol de sintaxis abstracta (AST)
-- Verificación de reglas de producción
-- Manejo de errores sintácticos
+// DECLARACIONES Y TIPOS
+TOKEN: {
+  // pass
+  <DECLARACION_VAR: "const" | "global" | "ref" | "value" | "params"> {System.out.println("DECLARACION_VAR -> " + image);}
+  | <TIPOS_DATO: "strg" | "let" | "flt" | "dobl" | "bool" | "byte" | "shrt" | "char" | "decim" | "enum" | "struct" | "date" | "datetime" | "array"> {System.out.println("TIPOS_DATO -> " + image);}
+  | <VALORES: "true" | "false" | "null"> {System.out.println("VALORES -> " + image);}
+}
 
-### **Sistema de Tipos**
-- Verificación de compatibilidad de tipos
-- Inferencia de tipos en declaraciones
-- Validación de operaciones y conversiones
-- Control de genéricos y plantillas
+// PROGRAMACIÓN ORIENTADA A OBJETOS
+TOKEN: {
+  <POO_CLASES: "class" | "classend" | "interface" | "abstract" | "override" | "new"> {System.out.println("POO_CLASES -> " + image);}
+  | <POO_MIEMBROS: "this" | "super" | "get" | "set" | "static" | "instance"> {System.out.println("POO_MIEMBROS -> " + image);}
+  | <POO_MODIFICADORES: "private" | "protected" | "public"> {System.out.println("POO_MODIFICADORES -> " + image);}
+}
 
-## 💡 Casos de Uso
+// FUNCIONES Y MÉTODOS
+TOKEN: {
+  <FUNCIONES: "func" | "lambda" | "return" | "void" | "last" | "del" | "as" | "in" | "from" | "type"> {System.out.println("FUNCIONES -> " + image);}
+}
 
-### **Desarrollo Educativo**
-- Enseñanza de conceptos de compiladores
-- Práctica con análisis léxico y sintáctico
-- Experimentación con diseño de lenguajes
+// MANEJO DE ARCHIVOS Y E/S
+TOKEN: {
+  <ARCHIVOS: "File" | "open" | "close" | "readfile" | "read" | "readln" | "write" | "writeln" | "seek" | "rename"> {System.out.println("ARCHIVOS -> " + image);}
+  | <ENTRADA_SALIDA: "display" | "input" | "exec"> {System.out.println("ENTRADA_SALIDA -> " + image);}
+}
 
-### **Prototipado Rápido**
-- Creación de DSLs (Domain Specific Languages)
-- Implementación de lenguajes especializados
-- Pruebas de conceptos de programación
+// OPERACIONES DE COLECCIONES
+TOKEN: {
+  <COLECCIONES: "append" | "extend" | "insert" | "remove" | "clear" | "reverse" | "copy" | "count" | "sort" | "index"> {System.out.println("COLECCIONES -> " + image);}
+  | <OPERACIONES_COL: "Max" | "Min" | "Sum" | "Height" | "Width" | "Left" | "Right" | "Top" | "Bottom" | "Tag"> {System.out.println("OPERACIONES_COL -> " + image);}
+}
 
-### **Investigación Académica**
-- Experimentación con nuevas características de lenguajes
-- Pruebas de paradigmas de programación
-- Desarrollo de extensiones lingüísticas
+// PROGRAMACIÓN CONCURRENTE
+TOKEN: {
+  <CONCURRENCIA: "strand" | "sync" | "run" | "Start" | "Stop" | "Pause" | "Sleep" | "event"> {System.out.println("CONCURRENCIA -> " + image);}
+}
 
-## 🛠 Flujo de Procesamiento
+// FUNCIONES MATEMÁTICAS
+TOKEN: {
+  <MATH_MODULO: "Math"> {System.out.println("MATH_MODULO -> " + image);}
+  | <FUNC_MATEMATICAS: "pow" | "sqrt" | "cos" | "sin" | "tan" | "degrees" | "radians" | "hypot" | "ceil" | "copysign" | "fabs" | "fact" | "floor" | "fmod" | "frexp" | "fsum" | "isfinite" | "isinf" | "isnan" | "idexp" | "modf" | "trunc" | "exp" | "log" | "log1" | "log2" | "log10" | "sinh" | "tanh" | "cosh" | "acos" | "asin" | "atan" | "acosh" | "asinh" | "atanh" | "pi" | "e" | "gamma" | "lgamma"> {System.out.println("FUNC_MATEMATICAS -> " + image);}
+  | <ALEATORIO: "random" | "time"> {System.out.println("ALEATORIO -> " + image);}
+}
 
-1. **Entrada**: Código fuente en el lenguaje JIDE-73
-2. **Análisis Léxico**: Conversión a tokens
-3. **Análisis Sintáctico**: Validación de estructura
-4. **Análisis Semántico**: Verificación de tipos y reglas
-5. **Salida**: Resultado del análisis o errores detectados
+// ELEMENTOS ESPECIALES
+TOKEN: {
+  <ESPECIALES: "select" | "object" | "packg" | "import"> {System.out.println("ESPECIALES -> " + image);}
+}
 
-## 🎓 Aplicaciones Prácticas
+// PATRONES BÁSICOS
+TOKEN: {
+  <NUMERO: (["0"-"9"])+> {System.out.println("NUMERO -> " + image);}
+}
 
-### **Para Estudiantes**
-- Comprensión de fases de compilación
-- Práctica con gramáticas formales
-- Desarrollo de habilidades en parsing
+TOKEN: {
+  <IDENTIFICADOR: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","_","0"-"9"])*> {System.out.println("IDENTIFICADOR -> " + image);}
+}
 
-### **Para Desarrolladores**
-- Creación de herramientas de análisis de código
-- Implementación de validadores sintácticos
-- Desarrollo de editores con syntax highlighting
+// COMILLAS
+TOKEN: {
+  <COMILLAS: "\"" | "\'"> {System.out.println("COMILLAS -> " + image);}
+}
 
-### **Para Investigadores**
-- Prototipado de nuevas características de lenguajes
-- Experimentación con sistemas de tipos
-- Pruebas de optimizaciones de código
+// Funcion principal, para reconocimineto
+void Inicio() :
+{}
+{
+  (
+    <OP_ARITMETICO>
+    | <OP_RELACIONAL>
+    | <OP_LOGICO>
+    | <OP_ASIGNACION>
+    | <OP_INCREMENTO>
+    | <OP_TERNARIO>
+    | <OP_FUSION_NULA>
+    | <OP_BIT>
+    | <APUNTADOR>
+    | <DELIMITADOR>
+    | <PUNTUACION>
+    | <CONTROL_CONDICIONAL>
+    | <CONTROL_BUCLES>
+    | <CONTROL_EXCEPCIONES>
+    | <DECLARACION_VAR>
+    | <TIPOS_DATO>
+    | <VALORES>
+    | <POO_CLASES>
+    | <POO_MIEMBROS>
+    | <POO_MODIFICADORES>
+    | <FUNCIONES>
+    | <ARCHIVOS>
+    | <ENTRADA_SALIDA>
+    | <COLECCIONES>
+    | <OPERACIONES_COL>
+    | <CONCURRENCIA>
+    | <MATH_MODULO>
+    | <FUNC_MATEMATICAS>
+    | <ALEATORIO>
+    | <ESPECIALES>
+    | <COMILLAS>
+    | <NUMERO>
+    | <IDENTIFICADOR>
+  )*
+  <EOF>
+}
+````
 
-## 🔍 Capacidades de Análisis
+---
 
-### **Validación Sintáctica**
-- Estructura de programas completos
-- Declaraciones y expresiones
-- Bloques y estructuras de control
-- Definiciones de clases y funciones
+### 🧠 Explicación breve
 
-### **Detección de Errores**
-- Errores léxicos (tokens inválidos)
-- Errores sintácticos (estructura incorrecta)
-- Errores semánticos (tipos incompatibles)
-- Errores de contexto (ámbitos y visibilidad)
+Este **analizador léxico** está desarrollado con **JavaCC**, una herramienta para generar analizadores léxicos y sintácticos en Java.
+Su objetivo es **leer un flujo de entrada (archivo o texto)** y **dividirlo en tokens** reconocibles (como operadores, palabras reservadas, delimitadores, identificadores, etc.), que luego serán usados por el **analizador sintáctico**.
 
-## 🌟 Características Destacadas
+**Componentes principales:**
 
-- **Lenguaje moderno** con características actuales
-- **Sistema de tipos robusto** y expresivo
-- **Integración multi-paradigma** flexible
-- **Extensible** mediante anotaciones y plugins
-- **Educativo** con mensajes de error claros
+* `PARSER_BEGIN` / `PARSER_END`: definen la clase principal del parser (`compi`).
+* **SKIP**: especifica los caracteres ignorados (espacios, tabulaciones, saltos de línea).
+* **TOKEN**: define los patrones léxicos (palabras clave, operadores, símbolos, identificadores, números).
+* **Método `Inicio()`**: punto de entrada del análisis, que recorre y reconoce los tokens hasta el final del archivo (`<EOF>`).
+* **Impresiones (`System.out.println`)**: muestran en consola qué tipo de token fue identificado durante el proceso.
 
-Este compilador representa una herramienta completa para el aprendizaje y experimentación con conceptos avanzados de diseño e implementación de lenguajes de programación.
+**En resumen**, este analizador:
+
+1. Lee un archivo o entrada estándar.
+2. Clasifica cada secuencia de caracteres según su tipo de token.
+3. Informa en consola qué se reconoció (por ejemplo: `OP_ARITMETICO -> +`).
+4. Finaliza indicando si el análisis fue exitoso o si se detectaron errores.
+
+---
+
+📘 *Este tipo de analizador es una parte fundamental del proceso de compilación, ya que transforma el texto fuente en unidades léxicas antes del análisis sintáctico y semántico.*
+
+```
+
+---
+
+¿Quieres que le agregue una pequeña **sección visual de ejemplo de ejecución** (por ejemplo, cómo se vería al analizar un texto con operadores y palabras clave)? Puedo añadirla al final del Markdown.
+```
